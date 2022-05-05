@@ -143,6 +143,66 @@
   
     
       <article
+id="post-cc1"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/05/05/cc1/">Java CommonsCollections1 反序列化分析</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>创建Maven项目后，导入如下依赖</p>
+<p>注：本文复现环境 jdk1.7</p>
+<pre><code class="txt">    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;commons-collections&lt;/groupId&gt;
+            &lt;artifactId&gt;commons-collections&lt;/artifactId&gt;
+            &lt;version&gt;3.1&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+</code></pre>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-05-05T01:52:38.000Z" itemprop="datePublished">2022-05-05</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a>
+        </div>
+    
+    
+        <div class="article-tag">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CommonsCollections/" rel="tag">CommonsCollections</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag">反序列化</a></li></ul>
+        </div>
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
 id="post-tips-wechat"
 class="article article-type-post"
 >
@@ -158,7 +218,7 @@ class="article article-type-post"
     </header>
     <div class="article-entry post-inner-html">
         
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在以往的比赛打点过程中，通常都是使用搜索引擎来获取目标资产信息，往往因为太麻烦或时间太短忽视了公众号、小程序的信息收集导致遗漏一些成果。所以在这里简单说一下如何对微信平台进行信息收集</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在以往的比赛打点过程中，通常都是使用搜索引擎来获取目标资产信息，往往因为太麻烦或时间太短忽视了公众号、小程序的信息收集导致可能会遗漏一些安全漏洞。所以在这里简单说一下如何对微信平台进行信息收集</p>
         
     </div>
     </div>
@@ -381,7 +441,7 @@ class="article article-type-post"
   <div class="widget-wrap widget-tags">
     <div class="widget-title"><span>Tags</span></div>
     <div class="widget-inner">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/shiro/" rel="tag">shiro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" rel="tag">信息收集</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E9%A9%AC/" rel="tag">内存马</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag">反射</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag">反序列化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CommonsCollections/" rel="tag">CommonsCollections</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shiro/" rel="tag">shiro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" rel="tag">信息收集</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98%E9%A9%AC/" rel="tag">内存马</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag">反射</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag">反序列化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li></ul>
     </div>
   </div>
 
@@ -392,6 +452,10 @@ class="article article-type-post"
     <div class="widget-title"><span>Recent Posts</span></div>
     <div class="widget-inner">
       <ul>
+        
+          <li>
+            <a href="/2022/05/05/cc1/">Java CommonsCollections1 反序列化分析</a>
+          </li>
         
           <li>
             <a href="/2022/04/29/tips-wechat/">小技巧之利用微信公众号、小程序信息收集</a>
@@ -441,8 +505,8 @@ class="article article-type-post"
     <!-- 开源不易，请勿删除 -->
     <div class="footer-wrap">
         <div class="footer-inner"> 
-            T1melo0per&#39;blog &copy; 2022<br>
-            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+            Mail: <a href="mailto:t1melo0per@qq.com">t1melo0per@qq.com</a><br>
+            T1melo0per&#39;blog &copy; 2022 &Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
         </div>
     </div>
 
